@@ -35,11 +35,14 @@
     </div>
     <!-- Make the map appear -->
     <div id="map" class="mapbox-map"></div>
+
+    <pre id="coordinates" class="coordinates"></pre>
     <!-- get keys.js -->
     <script type="text/javascript" src="keys.js"></script>
     <script>
       mapboxgl.accessToken = MAP_API_KEY;
-      var map = new mapboxgl.Map({
+      const coordinates = document.getElementById("coordinates");
+      const map = new mapboxgl.Map({
         container: "map",
         center: [-122.420679, 37.772537], // starting position [lng, lat]
         style: "mapbox://styles/mapbox/streets-v11",
@@ -59,11 +62,16 @@
 
         // Set marker options.
         marker.setLngLat(e.lngLat).addTo(map);
+
+        // Update block display
+        coordinates.style.display = "block";
+        coordinates.innerHTML = `Longitude: ${e.lngLat.lng}<br />Latitude: ${e.lngLat.lat}`;
       });
 
       // When dragged to a new location, new coordinates are set
       function onDragEnd() {
         const lngLat = marker.getLngLat();
+        coordinates.innerHTML = `Longitude: ${lngLat.lng}<br />Latitude: ${lngLat.lat}`;
         console.log(`The pin has been dragged to the coordinated: ${lngLat}`);
       }
 
