@@ -46,6 +46,12 @@
         zoom: 10,
       });
 
+      // Add event listener
+      map.on("click", (e) => {
+        // Log coordinates
+        console.log(`A click event has occurred at ${e.lngLat}`);
+      });
+
       // Add zoom and rotation controls to the map.
       map.addControl(new mapboxgl.NavigationControl());
     </script>
