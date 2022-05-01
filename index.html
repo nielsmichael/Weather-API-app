@@ -147,8 +147,8 @@
         let max;
         for (i = 0; i <= 5; i++) {
           forecastDate = res.daily[i].dt;
-          min = res.daily[i].temp.min - 273.15; // Convert Kelvin to Celcius because I'm not a pleb
-          max = res.daily[i].temp.max - 273.15;
+          min = Math.floor(res.daily[i].temp.min - 273.15); // Convert Kelvin to Celcius because I'm not a pleb
+          max = Math.floor(res.daily[i].temp.max - 273.15);
           date = new Date(forecastDate * 1000);
           $("#day-" + i + "_title").html(
             date.toLocaleString("en-JP", { weekday: "long" })
