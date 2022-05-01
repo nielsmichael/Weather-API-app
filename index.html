@@ -116,7 +116,7 @@
       const coordinates = document.getElementById("coordinates");
       const map = new mapboxgl.Map({
         container: "map",
-        center: [-122.420679, 37.772537], // starting position [lng, lat]
+        center: [139.6855, 35.6971], // starting position is Tokyo [lng, lat]
         style: "mapbox://styles/mapbox/streets-v11",
         zoom: 10,
       });
@@ -140,7 +140,7 @@
       }
 
       function updateTables(res) {
-        //$(".weather-wrapper").css("visibility", "visible");
+        $(".weather-wrapper").css("visibility", "visible");
         for (i = 0; i <= 5; i++) {
           getForecastDate(res.daily[i].dt);
           getTemp(res.daily[i].temp.min, res.daily[i].temp.max);

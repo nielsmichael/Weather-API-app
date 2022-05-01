@@ -34,9 +34,10 @@
 .weather-wrapper {
   width: 100%;
   margin: 1% auto;
-  /*visibility: hidden; */
+  visibility: hidden;
 }
 
 .card {
   margin: auto;
+  display: flex;
 }
