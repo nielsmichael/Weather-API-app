@@ -35,15 +35,80 @@
     <title>Weather App</title>
   </head>
   <body>
-    <div id="header" class="p-4 mb-3 bg-light rounded-3">
+    <!-- Header -->
+    <div id="header" class="p-3 mb-2 bg-light rounded-3">
       <div class="container-fluid py-5">
         <h1 class="display-5 fw-bold">Weather App</h1>
       </div>
     </div>
-    <!-- Make the map appear -->
-    <div id="map" class="mapbox-map"></div>
+    <!-- Form -->
 
-    <pre id="coordinates" class="coordinates"></pre>
+    <!-- Weather Forecast -->
+    <div class="weather-wrapper row">
+      <div class="col-1"></div>
+      <div class="col-2">
+        <div class="card" style="width: 100%">
+          <div class="card-body">
+            <h5 class="card-title" id="day-1_title"></h5>
+            <p class="card-text" id="day-1_min"></p>
+            <p class="card-text" id="day-1_max"></p>
+            <p class="card-text" id="day-1_forecast"></p>
+            <p class="card-text" id="day-1_description"></p>
+          </div>
+        </div>
+      </div>
+      <div class="col-2">
+        <div class="card" style="width: 100%">
+          <div class="card-body">
+            <h5 class="card-title" id="day-2_title"></h5>
+            <p class="card-text" id="day-2_min"></p>
+            <p class="card-text" id="day-2_max"></p>
+            <p class="card-text" id="day-2_forecast"></p>
+            <p class="card-text" id="day-2_description"></p>
+          </div>
+        </div>
+      </div>
+      <div class="col-2">
+        <div class="card" style="width: 100%">
+          <div class="card-body">
+            <h5 class="card-title" id="day-3_title"></h5>
+            <p class="card-text" id="day-3_min"></p>
+            <p class="card-text" id="day-3_max"></p>
+            <p class="card-text" id="day-3_forecast"></p>
+            <p class="card-text" id="day-3_description"></p>
+          </div>
+        </div>
+      </div>
+      <div class="col-2">
+        <div class="card" style="width: 100%">
+          <div class="card-body">
+            <h5 class="card-title" id="day-4_title"></h5>
+            <p class="card-text" id="day-4_min"></p>
+            <p class="card-text" id="day-4_max"></p>
+            <p class="card-text" id="day-4_forecast"></p>
+            <p class="card-text" id="day-4_description"></p>
+          </div>
+        </div>
+      </div>
+      <div class="col-2">
+        <div class="card" style="width: 100%">
+          <div class="card-body">
+            <h5 class="card-title" id="day-5_title"></h5>
+            <p class="card-text" id="day-5_min"></p>
+            <p class="card-text" id="day-5_max"></p>
+            <p class="card-text" id="day-5_forecast"></p>
+            <p class="card-text" id="day-5_description"></p>
+          </div>
+        </div>
+      </div>
+      <div class="col-1"></div>
+    </div>
+
+    <!-- Map -->
+    <div class="map-wrapper">
+      <div id="map" class="mapbox-map"></div>
+      <pre id="coordinates" class="coordinates"></pre>
+    </div>
     <!-- get keys.js -->
     <script type="text/javascript" src="keys.js"></script>
     <script>
@@ -56,7 +121,7 @@
         zoom: 10,
       });
 
-      // Initialize marker
+      // Initialize map marker
       const marker = new mapboxgl.Marker({
         color: "#FFFFFF",
         draggable: true,
@@ -66,11 +131,39 @@
       function getWeather(lon, lat) {
         $.ajax({
           type: "post",
-          url: `http://api.openweathermap.org/data/2.5/forecast?lat=${lat}&lon=${lon}&appid=${WEATHER_API_KEY}`,
+          url: `https://api.openweathermap.org/data/2.5/onecall?lat=${lat}&lon=${lon}&exclude=minutely,hourly&appid=${WEATHER_API_KEY}`,
           success: function (response) {
             console.log(response); // log for now
+            updateTables(response);
           },
         });
+      }
+
+      function updateTables(res) {
+        //$(".weather-wrapper").css("visibility", "visible");
+        let forecastDate;
+        let date;
+        let min;
+        let max;
+        for (i = 0; i <= 5; i++) {
+          forecastDate = res.daily[i].dt;
+          min = res.daily[i].temp.min - 273.15; // Convert Kelvin to Celcius because I'm not a pleb
+          max = res.daily[i].temp.max - 273.15;
+          date = new Date(forecastDate * 1000);
+          $("#day-" + i + "_title").html(
+            date.toLocaleString("en-JP", { weekday: "long" })
+          );
+          $("#day-" + i + "_min").html(min);
+          $("#day-" + i + "_max").html(max);
+          $("#day-" + i + "_forecast").html();
+          $("#day-" + i + "_description").html();
+        }
+      }
+
+      // When dragged to a new location, new coordinates are set
+      function onDragEnd() {
+        const lngLat = marker.getLngLat();
+        coordinates.innerHTML = `Longitude: ${lngLat.lng}<br />Latitude: ${lngLat.lat}`;
       }
 
       // Add event listener
@@ -86,16 +179,8 @@
         // Call weather API
         getWeather(lon, lat);
       });
-
-      // When dragged to a new location, new coordinates are set
-      function onDragEnd() {
-        const lngLat = marker.getLngLat();
-        coordinates.innerHTML = `Longitude: ${lngLat.lng}<br />Latitude: ${lngLat.lat}`;
-      }
-
       // Calls onDragEnd when marker is moved
       marker.on("dragend", onDragEnd);
-
       // Add zoom and rotation controls to the map.
       map.addControl(new mapboxgl.NavigationControl());
     </script>

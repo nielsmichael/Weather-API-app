@@ -10,6 +10,10 @@
   margin: auto;
   max-width: 900px;
   height: 500px;
+}
+
+.map-wrapper {
+  width: 100%;
   position: relative;
 }
 
@@ -25,4 +29,14 @@
   line-height: 18px;
   border-radius: 3px;
   display: none;
+}
+
+.weather-wrapper {
+  width: 100%;
+  margin: 1% auto;
+  /*visibility: hidden; */
+}
+
+.card {
+  margin: auto;
 }
