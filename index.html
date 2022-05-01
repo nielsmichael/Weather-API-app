@@ -46,10 +46,19 @@
         zoom: 10,
       });
 
+      // Initialize marker
+      const marker = new mapboxgl.Marker({
+        color: "#FFFFFF",
+        draggable: true,
+      });
+
       // Add event listener
       map.on("click", (e) => {
         // Log coordinates
         console.log(`A click event has occurred at ${e.lngLat}`);
+
+        // Set marker options.
+        marker.setLngLat(e.lngLat).addTo(map);
       });
 
       // Add zoom and rotation controls to the map.
