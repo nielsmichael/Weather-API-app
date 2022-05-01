@@ -141,28 +141,37 @@
 
       function updateTables(res) {
         //$(".weather-wrapper").css("visibility", "visible");
-        let forecastDate;
-        let date;
-        let min;
-        let max;
-        let forecast;
-        let description;
         for (i = 0; i <= 5; i++) {
-          forecastDate = res.daily[i].dt;
-          min = Math.floor(res.daily[i].temp.min - 273.15); // Convert Kelvin to Celcius because I'm not a pleb
-          max = Math.floor(res.daily[i].temp.max - 273.15);
-          date = new Date(forecastDate * 1000);
-          forecast = res.daily[i].weather[0].main; // Weather  returns as an array but with 1 item, so add zero
-          description = res.daily[i].weather[0].description;
-          $("#day-" + i + "_title").html(
-            date.toLocaleString("en-JP", { weekday: "long" })
-          );
-          $("#day-" + i + "_min").html("High: " + max);
-          $("#day-" + i + "_max").html("Low: " + min);
-          $("#day-" + i + "_forecast").html(forecast);
-          $("#day-" + i + "_description").html("Expect " + description);
+          getForecastDate(res.daily[i].dt);
+          getTemp(res.daily[i].temp.min, res.daily[i].temp.max);
+          getForecast(
+            res.daily[i].weather[0].main,
+            res.daily[i].weather[0].description
+          ); // Weather  returns as an array but with 1 item, so add zero
         }
       }
+
+      // Get Forecast date
+      const getForecastDate = (forecastDate) => {
+        date = new Date(forecastDate * 1000);
+        $("#day-" + i + "_title").html(
+          date.toLocaleString("en-JP", { weekday: "long" })
+        );
+      };
+
+      // Get Tempurature
+      const getTemp = (min, max) => {
+        let minTemp = Math.floor(min - 273.15);
+        let maxTemp = Math.floor(max - 273.15);
+        $("#day-" + i + "_min").html("High: " + maxTemp);
+        $("#day-" + i + "_max").html("Low: " + minTemp);
+      };
+
+      // Get Forecast
+      const getForecast = (main, descr) => {
+        $("#day-" + i + "_forecast").html(main);
+        $("#day-" + i + "_description").html("Expect " + descr);
+      };
 
       // When dragged to a new location, new coordinates are set
       function onDragEnd() {
