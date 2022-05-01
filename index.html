@@ -23,6 +23,13 @@
       href="https://api.mapbox.com/mapbox-gl-js/v2.8.1/mapbox-gl.css"
       rel="stylesheet"
     />
+    <!-- AJAX -->
+    <script
+      src="https://code.jquery.com/jquery-3.6.0.min.js"
+      integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4="
+      crossorigin="anonymous"
+    ></script>
+
     <link rel="stylesheet" href="css/styles.css" />
 
     <title>Weather App</title>
@@ -55,26 +62,38 @@
         draggable: true,
       });
 
+      // Function to call the weather api, triggered upon map click
+      function getWeather(lon, lat) {
+        $.ajax({
+          type: "post",
+          url: `http://api.openweathermap.org/data/2.5/forecast?lat=${lat}&lon=${lon}&appid=${WEATHER_API_KEY}`,
+          success: function (response) {
+            console.log(response); // log for now
+          },
+        });
+      }
+
       // Add event listener
       map.on("click", (e) => {
-        // Log coordinates
-        console.log(`A click event has occurred at ${e.lngLat}`);
-
         // Set marker options.
         marker.setLngLat(e.lngLat).addTo(map);
+        let lat = e.lngLat.lat;
+        let lon = e.lngLat.lng;
 
         // Update block display
         coordinates.style.display = "block";
-        coordinates.innerHTML = `Longitude: ${e.lngLat.lng}<br />Latitude: ${e.lngLat.lat}`;
+        coordinates.innerHTML = `Longitude: ${lon}<br />Latitude: ${lat}`;
+        // Call weather API
+        getWeather(lon, lat);
       });
 
       // When dragged to a new location, new coordinates are set
       function onDragEnd() {
         const lngLat = marker.getLngLat();
         coordinates.innerHTML = `Longitude: ${lngLat.lng}<br />Latitude: ${lngLat.lat}`;
-        console.log(`The pin has been dragged to the coordinated: ${lngLat}`);
       }
 
+      // Calls onDragEnd when marker is moved
       marker.on("dragend", onDragEnd);
 
       // Add zoom and rotation controls to the map.
