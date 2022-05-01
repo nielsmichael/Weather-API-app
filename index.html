@@ -145,18 +145,22 @@
         let date;
         let min;
         let max;
+        let forecast;
+        let description;
         for (i = 0; i <= 5; i++) {
           forecastDate = res.daily[i].dt;
           min = Math.floor(res.daily[i].temp.min - 273.15); // Convert Kelvin to Celcius because I'm not a pleb
           max = Math.floor(res.daily[i].temp.max - 273.15);
           date = new Date(forecastDate * 1000);
+          forecast = res.daily[i].weather[0].main; // Weather  returns as an array but with 1 item, so add zero
+          description = res.daily[i].weather[0].description;
           $("#day-" + i + "_title").html(
             date.toLocaleString("en-JP", { weekday: "long" })
           );
-          $("#day-" + i + "_min").html(min);
-          $("#day-" + i + "_max").html(max);
-          $("#day-" + i + "_forecast").html();
-          $("#day-" + i + "_description").html();
+          $("#day-" + i + "_min").html("High: " + max);
+          $("#day-" + i + "_max").html("Low: " + min);
+          $("#day-" + i + "_forecast").html(forecast);
+          $("#day-" + i + "_description").html("Expect " + description);
         }
       }
 
