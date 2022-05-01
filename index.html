@@ -61,6 +61,14 @@
         marker.setLngLat(e.lngLat).addTo(map);
       });
 
+      // When dragged to a new location, new coordinates are set
+      function onDragEnd() {
+        const lngLat = marker.getLngLat();
+        console.log(`The pin has been dragged to the coordinated: ${lngLat}`);
+      }
+
+      marker.on("dragend", onDragEnd);
+
       // Add zoom and rotation controls to the map.
       map.addControl(new mapboxgl.NavigationControl());
     </script>
