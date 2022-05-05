@@ -9,4 +9,4 @@ as well as getting these APIs to talk to each other as the user interacts with t
 There are 2 APIs used:
 
 1) Mapbox
-2) OpeanWeatherMap (to be implemented)
+2) OpeanWeatherMap
